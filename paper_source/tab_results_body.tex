@@ -1,0 +1,10 @@
+N1 & NAT & off & allowed & drops & yes & D\,8 & D\,8 & D\,3 R\,5 & D\,8 & R\,8 & D\,8 & D\,7 R\,1 \\
+N2 & NAT & off & filtered & drops & yes & R\,8 & D\,8 & R\,8 & D\,8 & R\,8 & R\,8 & R\,8 \\
+N3 & NAT & on & allowed & forwards & yes & R\,8 & G\,8 & R\,8 & G\,8 & R\,8 & R\,8 & R\,8 \\
+N4 & NAT & on & allowed & drops & yes & R\,8 & --\,8 & R\,8 & --\,8 & R\,8 & R\,8 & R\,8 \\
+N5 & NAT & on & allowed & drops & no & --\,8 & --\,8 & --\,8 & --\,8 & --\,8 & --\,8 & --\,8 \\
+N6 & public & off & filtered & drops & yes & D\,8 & D\,8 & D\,8 & D\,8 & D\,8 & D\,8 & D\,8 \\
+N7 & public & on & allowed & drops & yes & R\,8 & R\,8 & R\,8 & R\,8 & R\,8 & R\,8 & R\,8 \\
+N8 & NAT + IPv6 & off & allowed & drops & yes & D\,8 & D\,8 & D\,8 & D\,8 & D\,8 & D\,8 & D\,8 \\
+N9 & NAT + IPv6 & off & filtered & drops & yes & D\,8 & D\,8 & D\,8 & D\,8 & D\,8 & D\,8 & D\,8 \\
+N10 & NAT + IPv6 & on & allowed & drops & yes & R\,8 & R\,8 & R\,8 & --\,8 & R\,8 & R\,8 & R\,8 \\

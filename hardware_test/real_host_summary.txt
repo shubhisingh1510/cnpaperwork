@@ -1,0 +1,22 @@
+== edge_default trials 30 errors 0
+ browser: [('HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0', 30)]
+ host classes: Counter({'{"mdns": 1}': 30})
+ srflx classes: Counter({'{"public_v4": 1}': 30})
+ raw interface addr in offer: 0
+ srflx present: 30 srflx differs from host: 30
+ relay cands: 0
+ loopback connected: 30
+ selected: Counter({"(['host', 'redacted'], ['host', 'redacted'])": 30})
+ gather ms median 140 min 123 max 163
+ connect ms median 109 min 103 max 117
+== edge_mdns_off trials 30 errors 0
+ browser: [('HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0', 30)]
+ host classes: Counter({'{"private_v4": 1}': 30})
+ srflx classes: Counter({'{"public_v4": 1}': 30})
+ raw interface addr in offer: 30
+ srflx present: 30 srflx differs from host: 30
+ relay cands: 0
+ loopback connected: 30
+ selected: Counter({"(['host', 'private_v4'], ['host', 'private_v4'])": 30})
+ gather ms median 136 min 123 max 167
+ connect ms median 110 min 103 max 119

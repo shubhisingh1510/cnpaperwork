@@ -1,0 +1,84 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{booktabs,tabularx,array,enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\setlist{itemsep=4pt,topsep=4pt}
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Phone Test: Easy Steps}\\[4pt]
+{\large No cable, no router. Just a phone hotspot and this laptop.}
+\end{center}
+
+\section*{What you need}
+\begin{itemize}
+\item This laptop.
+\item One phone to make a hotspot (yours).
+\item The phones to test: yours and friends' (ask them first). Best to have: an \textbf{iPhone with Safari}, an \textbf{Android with Chrome}, and \textbf{Firefox} on Android if possible.
+\item About 2 minutes per phone.
+\end{itemize}
+
+\section*{Part 1: Start (once)}
+\begin{enumerate}
+\item On your phone, turn on \textbf{Mobile Hotspot}. Mobile data must be on.
+\item Connect the \textbf{laptop's Wi-Fi} to that hotspot.
+\item On the laptop, open the folder \texttt{Desktop\textbackslash cnfinalpaper\textbackslash hardware\_test}.
+\item Click the folder's address bar at the top, type \texttt{cmd}, press \textbf{Enter}. A black window opens.
+\item Type \texttt{python server.py} and press \textbf{Enter}.
+\item It prints one or more addresses like \texttt{http://192.168.43.12:8000/}. Write down the one that starts with \texttt{192.168}, \texttt{172.20} or \texttt{10.}
+\item If Windows asks about the firewall, tick \textbf{both} Private and Public, then press \textbf{Allow}.
+\item Keep the black window open until you finish.
+\end{enumerate}
+
+\section*{Part 2: Test each phone}
+\begin{enumerate}
+\item Connect the phone to the \textbf{same hotspot}. (The hotspot phone itself can also be tested; if the page will not open on it, skip it.)
+\item Open the browser you want to test (Safari, Chrome or Firefox).
+\item Type the address from Part 1, step 6, exactly, including \texttt{:8000}. A page called \textbf{WebRTC path test} opens.
+\item In the box \textbf{This device and browser}, type the phone and browser, for example \texttt{iPhone 13 Safari} or \texttt{Redmi Note 12 Chrome}.
+\item In the box \textbf{Network setup}, type \texttt{hotspot}.
+\item Press \textbf{Test this device only}. Wait about 10 seconds.
+\item The screen shows \textbf{Result: HIDES local address} or \textbf{Result: REVEALS local address}. It is saved on the laptop automatically.
+\item \textbf{Reload the page and press the button again}, so each phone is tested \textbf{3 times}.
+\item Repeat for every phone and every browser.
+\end{enumerate}
+
+\section*{Part 3: Write down (once per phone)}
+\begin{tabularx}{\textwidth}{@{}YYYY@{}}
+\toprule
+\textbf{Phone model} & \textbf{OS version} (Settings $\rightarrow$ About) & \textbf{Browser and version} (browser $\rightarrow$ About) & \textbf{Result (3 runs)} \\
+\midrule
+ & & & \\[14pt]
+ & & & \\[14pt]
+ & & & \\[14pt]
+ & & & \\[14pt]
+\bottomrule
+\end{tabularx}
+
+\section*{Part 4: Finish}
+\begin{enumerate}
+\item In the black window press \textbf{Ctrl + C}, then close it.
+\item A file \texttt{results.jsonl} is now in the \texttt{hardware\_test} folder. It holds only address \emph{types}, never the actual addresses.
+\item Send that file and the table above to Claude to add to the paper.
+\end{enumerate}
+
+\section*{If something goes wrong}
+\begin{tabularx}{\textwidth}{@{}p{5.2cm}Y@{}}
+\toprule
+\textbf{Problem} & \textbf{Fix} \\
+\midrule
+Page does not open on the phone & Check the phone is on the same hotspot. Try the other address the black window printed. Allow Python in the firewall for Public networks. \\
+\texttt{python} is not recognised & Close the black window and open it again from the folder; if it still fails, ask Claude. \\
+Result: NO CANDIDATES & Turn mobile data on; the hotspot needs internet. \\
+iPhone hotspot: laptop cannot connect & On the iPhone, keep the Personal Hotspot screen open while connecting. \\
+\bottomrule
+\end{tabularx}
+
+\vspace{6pt}
+\textbf{What this test does and does not show.} It shows what each phone browser reveals about its own address. It does not test client isolation, because a phone hotspot has no such setting. Each phone talks only to the laptop and to Google's public STUN server, as in a normal video call.
+
+\end{document}

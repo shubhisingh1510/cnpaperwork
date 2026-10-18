@@ -1,0 +1,7 @@
+__pycache__/
+*.aux
+*.log
+*.out
+*.blg
+*.synctex.gz
+.DS_Store
