@@ -1,0 +1,124 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{booktabs,tabularx,array,longtable,enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\setlist{itemsep=2pt,topsep=3pt}
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Pre-Submission Audit Report}\\[3pt]
+\textit{Threat-Modelling WebRTC-Based IP and Metadata Leakage on University BYOD Networks}\\[2pt]
+Revised manuscript: \texttt{paper\_final\_v2/cn\_paper\_final.pdf} (10 pages). Original kept unchanged in \texttt{paper\_source/}.\\
+Audit date: 19 October 2026
+\end{center}
+
+\section*{1. Summary}
+\begin{itemize}
+\item \textbf{Every number in the paper was reproduced from the raw data.} Re-running \texttt{analyze.py} on \texttt{trials\_v2.jsonl} (560 sessions, 0 harness errors) regenerated both result tables byte-for-byte. All counts quoted in the text (16/16, 0/200, 80/80, 112/112, 168/168, 56/56, 160/160, 48/56, 40/56) and the confidence bounds (63\%, 79\%, 94\%) match.
+\item \textbf{All 24 references were located} in authoritative records (arXiv API, Crossref, RFC Editor, IETF Datatracker, publisher and conference pages). One was corrected and two were completed with DOIs.
+\item \textbf{One false statement was found and corrected.} The previous acknowledgment said ``All experiments were run by the authors''. The emulated and laptop experiments were in fact executed by the AI assistant on the authors' computer; only the iPhone test was run by the authors. The disclosure now says so.
+\item \textbf{The writing was revised for readability, not to defeat detectors.} Twenty sentences of 40 or more words were split, two clipped rhetorical lines were rewritten, and one vague claim was replaced by the verified detail. No result, number, or citation was added or removed except the verified port number 3479.
+\end{itemize}
+
+\section*{2. Major corrections}
+\begin{tabularx}{\textwidth}{@{}L{3.2cm}Y@{}}
+\toprule
+\textbf{Where} & \textbf{Change and reason} \\
+\midrule
+Acknowledgment & Corrected who ran the experiments (see above). Required for an honest IEEE AI-use disclosure. \\
+Ref.\ Mirzoev \& White & The arXiv record states prior publication in \textit{i-manager's J.\ Inf.\ Technol.}, vol.~1, no.~2, 2012. Now cited as that journal article, with the arXiv number as a note. \\
+Ref.\ Cox \emph{et al.} & DOI 10.1109/TNSM.2017.2710623 added (Crossref). \\
+Ref.\ Fakis \emph{et al.} & DOI 10.3390/fi12050092 added (Crossref). \\
+Sec.\ V (covert channel) & ``non-standard UDP port'' replaced by ``UDP port 3479'', the port given in the Sansec report. \\
+Abstract & ``thousands of unmanaged devices'' (no source) changed to ``large numbers''. Two long sentences split; 249 words. \\
+Introduction & ``These results exist separately. \ldots\ This paper provides one.'' rewritten as a stated research gap; device checks now named among the contributions. \\
+Throughout & 20 sentences of 40+ words split (40 such sentences before, 28 of 35+ words after). \\
+Conclusion & 69-word future-work sentence condensed. \\
+Earlier pass & Unverifiable SSRN preprint (Bocan) removed; Schneier 1999 date and venue confirmed. \\
+\bottomrule
+\end{tabularx}
+
+\section*{3. Originality and attribution audit}
+\begin{itemize}
+\item \textbf{Source-text overlap (internal check, not a similarity service).} The paper body was compared with the full or abstract text of 13 cited sources that could be downloaded: five arXiv abstracts, RFC 7593, 8826 and 8828, the mDNS Internet-Draft, and the Sansec, AirSnitch, Framing Frames and MacStealer pages. Only 18 of 8{,}044 words (0.22\%) fall in any run of six identical words, and each run is a title or fixed term (e.g.\ ``client isolation in Wi-Fi networks''). No passage needed rewriting for overlap.
+\item \textbf{Not covered:} the full text of paywalled papers (Nibert, Cox, Framing Frames full paper, AirSnitch full paper), the wider web, and student-paper databases. Only Turnitin or iThenticate can cover those.
+\item \textbf{Attribution.} Every leakage class, attack step, and countermeasure in Tables II, IV and V names its source or is marked as an assumption (A1--A4). The literature-search description (Google Scholar, seven queries, 41 sources) matches the authors' own Research Gap Analysis document (August 2026).
+\item \textbf{Repetition.} No filler transitions (``furthermore'', ``moreover'', ``it is important to note'') occur. The only phrase repeated four or more times is ``Wi-Fi client isolation'', the subject of the paper.
+\item \textbf{AI-detector score: not established.} No AI-detection service is available in this environment, so no score can be reported. Detector scores are unreliable on technical writing. The paper discloses AI assistance as IEEE requires, which is what protects the authors.
+\item \textbf{Similarity percentage: not established.} No similarity-checking service was run. The 0.22\% figure above is an internal comparison against 13 sources only and must not be presented as a similarity report.
+\end{itemize}
+
+\section*{4. Reference verification}
+\small
+\begin{longtable}{@{}L{0.6cm}L{2.6cm}L{3.6cm}L{8.6cm}@{}}
+\toprule
+\textbf{\#} & \textbf{Key} & \textbf{Checked against} & \textbf{Result} \\
+\midrule
+\endhead
+1 & rfc8445 & RFC Editor & Title, authors, July 2018: match. \\
+2 & rfc8828 & RFC Editor + full text & Match; four address-handling modes as described. \\
+3 & rfc8826 & RFC Editor + full text & Match. \\
+4 & alfannah2017 & arXiv 1709.05395 & Title, author, 2017: match. \\
+5 & fakis2020 & Crossref & Match; issue 5 and DOI added. \\
+6 & koysha2025 & arXiv 2510.16168 & Title, authors, 17 Oct 2025: match. Preprint, not peer reviewed (stated in paper). Android/CGNAT claims consistent with abstract; detailed claims from full-text reading on 12 Oct 2026. \\
+7 & nibert2025 & Crossref DOI & LNCS vol.~15456, pp.~365--381, 2025, five authors: match. \\
+8 & rfc7593 & RFC Editor + full text & Match. \\
+9 & airsnitch2026 & NDSS paper page & Title, seven authors, ``every tested router and network was vulnerable'': match. ``Two university networks'' is from the full paper (read 12 Oct 2026), not re-checked today. \\
+10 & sansec2026 & Sansec page & Published 24 March 2026; CSP bypass, DTLS over UDP, port 3479: match. \\
+11 & framingframes2023 & USENIX page & Title and three authors: match. \\
+12 & macstealer & GitHub repository & Match (CVE-2022-47522). \\
+13 & tchao2017 & arXiv 1710.08795 & Match. \\
+14 & rfc8489 & RFC Editor & Match. \\
+15 & rfc6598 & RFC Editor & Match. \\
+16 & mdnsdraft & IETF Datatracker & Draft -03, four authors: match; draft expired (stated in paper). \\
+17 & mirzoev2014 & arXiv 1404.2172 & \textbf{Corrected} to 2012 journal publication. \\
+18 & tang2022 & arXiv 2212.02740 & Six authors, Dec.\ 2022: match. \\
+19 & cox2017 & Crossref & Vol.~14, no.~3, pp.~756--770, Sept.\ 2017: match; DOI added. \\
+20 & schneier1999 & Author's archive & Dr.\ Dobb's Journal, Dec.\ 1999: match. Volume, issue and pages from secondary citations only. \\
+21 & rfc3176 & RFC Editor & Match. \\
+22 & rfc5477 & RFC Editor & Match. \\
+23 & hancke2021 & webrtcHacks page & 27 Sept 2021; iOS 15 Private Relay findings: match. \\
+24 & webkit233414 & WebKit Bugzilla & Reporter, Nov.\ 2021, fixed Dec.\ 2022: match. \\
+\bottomrule
+\end{longtable}
+\normalsize
+
+\section*{5. Scientific and reproducibility audit}
+\begin{itemize}
+\item \textbf{Emulation (Tables VI, VII).} Reproduced from raw data as stated in Section 1. Re-running the sessions themselves needs root in WSL/Linux, coturn 4.5.2, and the Playwright browser builds named in the paper; all scripts are in \texttt{experiment/}. Not re-run today.
+\item \textbf{Laptop check (Sec.\ VIII-D).} 60 sessions, 0 errors; counts and medians match \texttt{real\_host\_results.jsonl}. Re-runnable with \texttt{real\_host\_probe.py}.
+\item \textbf{iPhone check (Sec.\ VIII-E).} Evidence is two screenshots; the server's \texttt{results.jsonl} was saved on another laptop and is not in the repository. The paper reports exactly what the screenshots show and states $n=2$.
+\item \textbf{Statistics.} Exact (Clopper--Pearson) 95\% lower bounds for 8/8, 16/16 and 56/56 recomputed: 0.631, 0.794, 0.936. Correct.
+\item \textbf{Known unexplained result.} Raw-host relay failures under NAT with isolation and 20~ms delay are reported as unexplained. This is honest, but a reviewer will ask about it.
+\item \textbf{Abstract and conclusion} agree with the results; no claim exceeds the data.
+\end{itemize}
+
+\section*{6. Unresolved author decisions}
+\begin{enumerate}
+\item Confirm the spelling of all names, especially ``Jilagam Yatin'' and ``Dr.\ Kopperundevi'' (initial, title), and whether the guide is a co-author or acknowledged instead.
+\item Add e-mail addresses and mark a corresponding author if the venue requires it.
+\item Choose the venue. Confirm its page limit (the paper is 10 pages), paper size, and whether review is double-blind. If it is, remove the names and the GitHub link from the review copy, and make the repository private until review ends.
+\item The laptop check ran on the laptop's everyday Wi-Fi. If that was the college network, state it, and confirm that a measurement of one's own browser on it is acceptable to your department.
+\item Read the whole paper, rewrite anything you would say differently in your own words, and confirm that the AI-use statement is accurate.
+\item Check whether the Koysha preprint has since been published in a peer-reviewed venue, and cite that version if so.
+\end{enumerate}
+
+\section*{7. Submission readiness}
+\textbf{Suitable, after the decisions in Section 6, for a mid-tier IEEE conference such as ICRCICN 2027.} Every figure traces to released raw data, every reference exists, claims are bounded by the evidence, and the format follows IEEEtran with a 249-word abstract.
+
+\textbf{Not yet competitive at top venues} (IEEE S\&P, EuroS\&P, ICC). The emulation is not Wi-Fi hardware, the device checks are small ($n=60$ on one laptop, $n=2$ on one phone), no Android device was measured, and the countermeasure ranking is the authors' judgement. Estimated novelty: about 7 out of 10.
+
+\section*{8. Risks that need external tools, data, or the authors}
+\begin{itemize}
+\item \textbf{Similarity:} a formal Turnitin or iThenticate report, via the VIT library, is still needed.
+\item \textbf{AI detection:} any detector may flag the text. The disclosure is the correct response; acceptance policy on AI-assisted writing varies by venue.
+\item \textbf{Evidence:} Android measurements and a test on a real access point with client isolation would remove the strongest reviewer objection.
+\item \textbf{Paywalled sources:} the full texts of Nibert, Cox, Framing Frames and AirSnitch were not re-read today; their cited claims rest on the 12 October 2026 reading.
+\end{itemize}
+
+\end{document}

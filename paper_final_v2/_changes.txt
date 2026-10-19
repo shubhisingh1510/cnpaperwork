@@ -1,0 +1,27 @@
+Abstract: unsourced 'thousands' replaced by a claim the paper does not need to quantify.
+Abstract: 46-word sentence split.
+Abstract: 46-word sentence split.
+Introduction: 49-word sentence split.
+Introduction: 49-word sentence split; sentence no longer opens with 'And'.
+Introduction: clipped rhetorical sentences ('These results exist separately.' / 'This paper provides one.') rewritten as a stated gap; device checks named.
+Contributions: 42-word item split.
+Background: 40-word sentence split.
+Background: 43-word sentence split.
+Hostel tree: 48-word sentence split.
+Covert channel: 'non-standard port' replaced by the port given in the Sansec report (3479), verified against the source.
+Framework: 40-word sentence split.
+Setup: 50-word sentence split.
+Results: 44-word sentence split.
+Results: 47-word sentence split.
+Mobile evidence: 41-word sentence split.
+Results discussion: 41-word sentence split.
+Results discussion: 43-word sentence split.
+Discussion: 42-word sentence split.
+Ethics: 40-word sentence split.
+Conclusion: 69-word future-work sentence split into four.
+Acknowledgment: corrected a false statement ('All experiments were run by the authors'); the emulation and laptop runs were executed with the AI assistant.
+Reference Mirzoev & White: arXiv record shows prior journal publication (i-manager's J. Inf. Technol., vol. 1, no. 2, 2012); cited as journal article with arXiv note.
+Reference Cox et al.: DOI 10.1109/TNSM.2017.2710623 added (Crossref).
+Reference Fakis et al.: issue 5 and DOI 10.3390/fi12050092 added (Crossref).
+Conclusion: future-work list condensed (page limit).
+Reference WebKit bug: duplicated resolution date removed from entry (stated in text).
