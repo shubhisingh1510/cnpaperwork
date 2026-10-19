@@ -136,6 +136,8 @@ WebRTC as attack surface & Peer address exposure~\cite{tang2022,rfc8826}; data-c
 Isolation bypass & Isolation can be defeated, also on university networks~\cite{framingframes2023,airsnitch2026} & No link to application-layer leakage \\
 \addlinespace
 Campus BYOD & Risk assessment~\cite{tchao2017}; architecture~\cite{rfc7593}; no software on clients~\cite{cox2017} & Not tied to a specific protocol behaviour \\
+\midrule
+\textbf{This paper} & Campus attack trees joining leakage and isolation bypass; operator ranking; emulated test & No Wi-Fi hardware or Android \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -505,21 +507,19 @@ The device checks support the disclosure part on real hardware. Not tested: any 
 
 \textit{Multicast filtering is a partial control that operators may already have.} The mDNS draft warns that name resolution may fail where multicast is restricted~\cite{mdnsdraft}. In the emulation this happened: default sessions moved to the relay when mDNS was filtered. The effect does not extend to browsers that advertise raw addresses, which~\cite{koysha2025} reports for Android, and it disappeared when the segment had global IPv6. It cannot be counted as a countermeasure.
 
-\textit{IPv6 deserves the operator's attention first.} Address translation was the one network property that kept a default browser's address from the peer, and it applies to IPv4 only. A campus that runs dual-stack with global IPv6 on client segments is, for this leakage, in the position of the publicly addressed networks of~\cite{nibert2025}, whatever its IPv4 plan. The leakage measurements in~\cite{koysha2025} did not cover IPv6.
+\textit{IPv6 deserves the operator's attention first.} Address translation was the one network property that kept a default browser's address from the peer, and it applies to IPv4 only. A campus that runs dual-stack with global IPv6 on client segments is, for this leakage, in the position of the publicly addressed networks of~\cite{nibert2025}, whatever its IPv4 plan.
 
-\textit{Ethics.} The paper describes attacks that are already public and adds no technique. The emulated evaluation ran on an isolated network on one computer. The device checks ran on the authors' own devices. They exchanged packets with a public STUN server and with a test page on the authors' laptop, as any video call does, and stored address classes rather than addresses. No data about any person or institution was collected.
+\textit{Ethics.} The paper describes attacks that are already public and adds no technique. The emulation ran on an isolated network on one computer. The device checks ran on the authors' own devices, contacted only a public STUN server and a test page on the authors' laptop, and stored address classes rather than addresses. No personal or institutional data was collected.
 
 \section{Limitations}
 \label{sec:limits}
 \begin{enumerate}
 \item \textit{No live-network measurement.} The attack steps are taken from cited sources or marked as assumptions, and none was reproduced. The evaluation covers ordinary browser behaviour under four controls, not the isolation-bypass attacks.
 \item \textit{Emulation, not Wi-Fi.} The client segment is a Linux bridge. Bridge port isolation stands in for Wi-Fi client isolation and does not reproduce any vendor's implementation, its weaknesses, or radio effects. The physical-interface check covers one laptop, one browser, and one IPv4-only network behind NAT, and tests disclosure only.
-\item \textit{Browsers.} Only headless desktop Linux builds of Chromium, Firefox, and WebKit were used. The raw-host configuration is a switch on those builds, not an Android or iOS browser, and the WebKit build is not Safari. Mobile evidence is two sessions on one iPhone (iOS~26.0), on a cellular connection rather than campus Wi-Fi, and published sources in Section~\ref{sec:mobile}, two of them informal (a blog post and a bug report). Android was not measured by us. Microphone permission was granted through a fake device. Sessions used one STUN and TURN implementation, one added delay, and eight repetitions per cell, so rates between about 60\% and 100\% cannot be told apart within a cell. The failure of raw-host sessions under translation is reported and not explained.
+\item \textit{Browsers.} Only headless desktop Linux builds of Chromium, Firefox, and WebKit were used. The raw-host configuration is a switch on those builds, not an Android or iOS browser, and the WebKit build is not Safari. Mobile evidence is two sessions on one iPhone (iOS~26.0), on a cellular connection rather than campus Wi-Fi, and published sources in Section~\ref{sec:mobile}, two of them informal (a blog post and a bug report). Microphone permission was granted through a fake device. Sessions used one STUN and TURN implementation, one added delay, and eight repetitions per cell, so rates between about 60\% and 100\% cannot be told apart within a cell. The failure of raw-host sessions under translation is reported and not explained.
 \item \textit{Reference model, not a real network.} The architecture combines RFC~7593 with one published description of a university deployment. Assumptions A1 to A4 may be false at a given institution, and the trees change if they are.
-\item \textit{Judgement-based ratings.} Burden and enforcement are ordinal ratings assigned by the authors. No cost data, vendor survey, or expert elicitation supports them. A different ordering rule, for example coverage first, would move C9 to the top.
-\item \textit{Coverage counts steps, not risk.} Steps are not weighted by likelihood or impact, so a coverage of six is not twice as good as three.
-\item \textit{Evidence quality.} The main leakage measurement is an unreviewed preprint that tested neither VPNs nor Apple platforms; the covert-channel evidence is one vendor report.
-\item \textit{Search.} The literature search used one index and was screened by the two authors without a formal protocol. Relevant work may have been missed.
+\item \textit{Judgement-based ratings.} Burden and enforcement are ordinal ratings assigned by the authors. No cost data, vendor survey, or expert elicitation supports them, and coverage counts steps without weighting them by likelihood or impact. A different ordering rule, for example coverage first, would move C9 to the top.
+\item \textit{Evidence quality and search.} The main leakage source is an unreviewed preprint and the covert-channel evidence is one vendor report (Section~\ref{sec:model}). The literature search used one index and was screened by two of the authors without a formal protocol.
 \item \textit{Scope.} Attacks on authentication, rogue access points, and wired residence networks are not modelled.
 \end{enumerate}
 
@@ -529,8 +529,11 @@ This paper joined work on WebRTC address leakage, Wi-Fi client-isolation bypass,
 
 Future work should repeat the evaluation on Wi-Fi access points and with Android and more iOS devices, reproduce the measurements on a campus network with the operator's approval, check assumptions A1 to A4, explain the relay failures under translation, and replace the ordinal ratings with administrators' estimates.
 
+\section*{Data Availability}
+The testbed and analysis scripts, the raw session records, the device-check data, and the paper source are available at \url{https://github.com/shubhisingh1510/cnpaperwork}.
+
 \section*{Acknowledgment}
-The test scripts, data, and paper source are released at \url{https://github.com/shubhisingh1510/cnpaperwork}. In line with IEEE policy on AI-generated content, the authors disclose that Claude (Anthropic), an AI assistant, was used to help draft and edit the text, to write the testbed, analysis, and test-page scripts, to execute the emulated evaluation and the laptop measurement on the authors' computer, and to format the manuscript. The iPhone measurement was carried out by the authors. The authors reviewed the content and take full responsibility for it.
+In line with IEEE policy on AI-generated content, the authors disclose that Claude (Anthropic), an AI assistant, was used to help draft and edit the text, to write the testbed, analysis, and test-page scripts, to execute the emulated evaluation and the laptop measurement on the authors' computer, and to format the manuscript. The iPhone measurement was carried out by the authors. The authors reviewed the content and take full responsibility for it.
 
 \balance
 \bibliographystyle{IEEEtran}

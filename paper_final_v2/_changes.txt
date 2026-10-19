@@ -25,3 +25,5 @@ Reference Cox et al.: DOI 10.1109/TNSM.2017.2710623 added (Crossref).
 Reference Fakis et al.: issue 5 and DOI 10.3390/fi12050092 added (Crossref).
 Conclusion: future-work list condensed (page limit).
 Reference WebKit bug: duplicated resolution date removed from entry (stated in text).
+Table I: final row states this paper's contribution and its open gap.
+Data Availability: separate section (was inside Acknowledgment).
