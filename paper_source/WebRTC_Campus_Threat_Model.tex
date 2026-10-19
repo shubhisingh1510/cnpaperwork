@@ -7,6 +7,7 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,calc,fit}
 \usepackage{url}
+\def\UrlBreaks{\do\/\do-\do.\do=\do?}
 \usepackage{balance}
 \usepackage[hidelinks]{hyperref}
 
@@ -48,11 +49,24 @@
 
 \begin{document}
 
-\title{Threat-Modelling WebRTC-Based IP and Metadata Leakage on University BYOD Networks: A Campus-Specific Countermeasure Framework with an Emulated Evaluation}
+\title{Threat-Modelling WebRTC-Based IP and Metadata Leakage on University BYOD Networks: A Campus-Specific Countermeasure Framework with Emulated and On-Device Evaluation}
 
 \author{
-\IEEEauthorblockN{Shubhi Singh and Jilagam Yatin}
-\IEEEauthorblockA{\textit{School of Computer Science and Engineering}\\
+\IEEEauthorblockN{Shubhi Singh}
+\IEEEauthorblockA{\textit{School of Computer Science}\\
+\textit{and Engineering (SCOPE)}\\
+\textit{Vellore Institute of Technology}\\
+Vellore, India}
+\and
+\IEEEauthorblockN{Jilagam Yatin}
+\IEEEauthorblockA{\textit{School of Computer Science}\\
+\textit{and Engineering (SCOPE)}\\
+\textit{Vellore Institute of Technology}\\
+Vellore, India}
+\and
+\IEEEauthorblockN{Dr. Kopperundevi}
+\IEEEauthorblockA{\textit{School of Computer Science}\\
+\textit{and Engineering (SCOPE)}\\
 \textit{Vellore Institute of Technology}\\
 Vellore, India}
 }
@@ -60,7 +74,7 @@ Vellore, India}
 \maketitle
 
 \begin{abstract}
-WebRTC lets browsers exchange media and data directly, and to do so it gathers and shares the network addresses of the device. A university bring-your-own-device (BYOD) wireless network concentrates thousands of unmanaged personal devices on shared segments under the eduroam roaming architecture, and the operator's usual control, Wi-Fi client isolation, has published bypasses. This paper presents a threat model for that setting and tests its main recommendations in emulation. The model defines a reference campus architecture, five leakage classes, and four adversaries, builds attack trees for a lecture hall, a hostel, and a library, and maps twenty attack steps to eleven countermeasures ranked by deployment burden, enforceability, and coverage. The evaluation runs 560 browser-to-browser sessions with Chromium, Firefox, and WebKit on an emulated client segment under ten network configurations. With link-layer isolation alone, browsers that advertised raw addresses still reached each other through the gateway in 16 of 16 sessions; a gateway filter removed that path in every session. Filtering multicast DNS moved default browsers from a direct path to a relay, but only while the segment was IPv4-only behind NAT. With global IPv6 on the segment, every browser disclosed its IPv6 address in 168 of 168 sessions and connected directly over IPv6 in 56 of 56 sessions despite the multicast filter. With isolation and the gateway filter on and no relay, no session connected. A check on one laptop's physical Wi-Fi interface (60 sessions with Microsoft Edge) reproduced the emulation's NAT result: the default configuration never placed the private address in the offer, and the raw-host configuration always did. The emulation uses a Linux bridge, not Wi-Fi hardware, and desktop browser builds; mobile behaviour is taken from published measurements; the ranking remains a qualitative judgement.
+WebRTC lets browsers exchange media and data directly, and to do so it gathers and shares the network addresses of the device. University bring-your-own-device (BYOD) wireless networks place thousands of unmanaged devices on shared eduroam segments, and the operator's usual control, Wi-Fi client isolation, has published bypasses. This paper presents a threat model for that setting: a reference campus architecture, five leakage classes, four adversaries, and attack trees for a lecture hall, a hostel, and a library, whose twenty attack steps are mapped to eleven countermeasures ranked by deployment burden, enforceability, and coverage. An emulation of 560 browser-to-browser sessions with Chromium, Firefox, and WebKit under ten network configurations tests the main recommendations. With link-layer isolation alone, browsers that advertised raw addresses still reached each other through the gateway in 16 of 16 sessions; a gateway filter removed that path. Filtering multicast DNS moved default browsers to a relay only on IPv4 behind NAT. With global IPv6 on the segment, every browser disclosed its IPv6 address (168 of 168 sessions) and connected directly over IPv6 despite the filter. On real hardware, 60 sessions of Microsoft Edge on a laptop's Wi-Fi interface reproduced the emulated NAT result, and Safari on an iPhone 16 Pro Max (iOS 26.0) hid its local addresses but disclosed public IPv4 and global IPv6 addresses through STUN in both sessions run. The emulation uses a Linux bridge, not Wi-Fi hardware, the device checks are small, and the ranking remains a qualitative judgement.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -83,9 +97,9 @@ This paper provides one. It builds the model by synthesis of published work and 
 \item a reference model of a campus wireless network, with five leakage classes and four adversaries, each tied to published evidence (Section~\ref{sec:model});
 \item attack trees for three campus scenarios, a lecture hall, a hostel, and a library, decomposed into twenty attack steps (Section~\ref{sec:trees});
 \item eleven countermeasures mapped to those steps and ranked by an explicit rule, with client isolation identified as insufficient alone (Section~\ref{sec:framework});
-\item an emulated evaluation of 560 browser-to-browser sessions under ten network configurations, which measures what isolation, gateway filtering, multicast filtering, address translation, and IPv6 each change, with a check of the disclosure result on a physical Wi-Fi interface (Section~\ref{sec:eval}).
+\item an emulated evaluation of 560 browser-to-browser sessions under ten network configurations, which measures what isolation, gateway filtering, multicast filtering, address translation, and IPv6 each change, with checks of the disclosure result on a physical Wi-Fi interface and on an iPhone (Section~\ref{sec:eval}).
 \end{itemize}
-The evaluation is an emulation with desktop browsers plus a single-host check on real hardware, not a measurement on a campus network. Section~\ref{sec:limits} states what that means for the conclusions.
+The evaluation is an emulation with desktop browsers plus small checks on real hardware, not a measurement on a campus network. Section~\ref{sec:limits} states what that means for the conclusions.
 
 \section{Background}
 \label{sec:background}
@@ -117,7 +131,7 @@ We searched Google Scholar with seven query formulations covering WebRTC leakage
 \midrule
 Leakage measurement & Which browsers disclose which addresses~\cite{koysha2025,nibert2025,alfannah2017}; endpoint fixes~\cite{nibert2025,fakis2020}; handling modes~\cite{rfc8828} & Fixes act on the device; no network-topology analysis \\
 \addlinespace
-WebRTC as attack surface & Peer address exposure~\cite{tang2022,rfc8826}; egress channel~\cite{bocan2026}; data-channel skimmer~\cite{sansec2026} & Generic web or enterprise setting \\
+WebRTC as attack surface & Peer address exposure~\cite{tang2022,rfc8826}; data-channel skimmer~\cite{sansec2026} & Generic web or enterprise setting \\
 \addlinespace
 Isolation bypass & Isolation can be defeated, also on university networks~\cite{framingframes2023,airsnitch2026} & No link to application-layer leakage \\
 \addlinespace
@@ -128,7 +142,7 @@ Campus BYOD & Risk assessment~\cite{tchao2017}; architecture~\cite{rfc7593}; no 
 
 \textit{Leakage measurement.} Koysha \emph{et al.} tested Chrome, Brave, Firefox, and Tor on Windows, Linux, and Android, with a first phase on a university Wi-Fi network, and outlined a threat model for what they call semi-trusted BYOD environments~\cite{koysha2025}. Their model classifies networks by trust level and stays at the browser; it does not decompose a campus network or rank operator-side controls. Nibert \emph{et al.} analysed desktop browsers and confined Firefox in a container as the fix~\cite{nibert2025}. Fakis \emph{et al.} used a browser extension and an HTTP gateway~\cite{fakis2020}. None of these can be imposed on a visitor's phone.
 
-\textit{WebRTC as an attack surface.} RFC~8826 records that ICE reveals a party's address to the other party~\cite{rfc8826}. Tang \emph{et al.} show that peer-assisted video delivery exposes viewers' addresses to other viewers~\cite{tang2022}. Bocan models WebRTC pairing as an enterprise egress channel~\cite{bocan2026}, and the Sansec report shows such a channel in use by criminals~\cite{sansec2026}.
+\textit{WebRTC as an attack surface.} RFC~8826 records that ICE reveals a party's address to the other party~\cite{rfc8826}. Tang \emph{et al.} show that peer-assisted video delivery exposes viewers' addresses to other viewers~\cite{tang2022}. The Sansec report shows a WebRTC data channel used by criminals as an egress channel~\cite{sansec2026}.
 
 \textit{Isolation bypass.} The work in~\cite{framingframes2023,airsnitch2026} establishes that devices on a network configured for isolation can still reach or intercept each other. It treats the choice of victim as given.
 
@@ -245,7 +259,7 @@ Table~\ref{tab:scen} gives the scenarios. In each tree the three sub-goals must 
 \label{tab:scen}
 \centering
 \footnotesize
-\begin{tabularx}{\columnwidth}{@{}L{1.25cm}YL{1.1cm}L{2.35cm}@{}}
+\begin{tabularx}{\columnwidth}{@{}L{1.25cm}YL{1.3cm}L{2.15cm}@{}}
 \toprule
 \textbf{Scenario} & \textbf{Defining property} & \textbf{Adversary} & \textbf{Main leakage} \\
 \midrule
@@ -322,7 +336,7 @@ Step X1 is independent of topology. A compromised page (adversary~P) opens a dat
 \label{tab:steps}
 \centering
 \footnotesize
-\begin{tabularx}{\textwidth}{@{}L{0.5cm}YL{3.9cm}L{2.6cm}@{}}
+\begin{tabularx}{\textwidth}{@{}L{0.5cm}YL{3.8cm}L{2.7cm}@{}}
 \toprule
 \textbf{Step} & \textbf{Description} & \textbf{Basis} & \textbf{Countermeasures} \\
 \midrule
@@ -362,7 +376,7 @@ Table~\ref{tab:cm} lists eleven countermeasures in ranked order under the rule o
 \label{tab:cm}
 \centering
 \footnotesize
-\begin{tabularx}{\textwidth}{@{}L{0.55cm}L{0.5cm}L{4.4cm}L{1.0cm}L{1.35cm}L{1.05cm}Y@{}}
+\begin{tabularx}{\textwidth}{@{}L{0.55cm}L{0.5cm}L{4.2cm}L{1.0cm}L{1.5cm}L{1.15cm}Y@{}}
 \toprule
 \textbf{Rank} & \textbf{ID} & \textbf{Countermeasure} & \textbf{Burden} & \textbf{Enforcement} & \textbf{Coverage} & \textbf{Residual weakness} \\
 \midrule
@@ -424,7 +438,7 @@ The testbed runs on one Linux host (kernel 6.18) with network namespaces. Two cl
 \centering
 \footnotesize
 \setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\textwidth}{@{}L{0.5cm}L{1.55cm}L{1.0cm}L{0.95cm}L{1.05cm}L{0.6cm}YYYYYYY@{}}
+\begin{tabularx}{\textwidth}{@{}L{0.5cm}L{1.4cm}L{1.1cm}L{0.95cm}L{1.15cm}L{0.65cm}YYYYYYY@{}}
 \toprule
  & \multicolumn{5}{c}{\textbf{Network configuration}} & \multicolumn{7}{c}{\textbf{Path taken (count of sessions)}} \\
 \cmidrule(lr){2-6}\cmidrule(l){7-13}
@@ -464,18 +478,24 @@ Table~\ref{tab:results} gives the path each session took and Table~\ref{tab:disc
 
 \subsection{Check on a Physical Wi-Fi Interface}
 \label{sec:realhost}
-The disclosure result (Q3) depends only on the browser and on the addressing of the interface, so it can be checked on real hardware without a second device. One laptop (Windows~11, Intel Wi-Fi~7 BE201 adapter associated in 802.11n mode) ran Microsoft Edge~155 headless through Playwright on its everyday Wi-Fi connection, which gave it a private IPv4 address behind NAT and only a link-local IPv6 address. Each session started a fresh browser, gathered candidates against a public STUN server, and then connected two peer connections inside the same page. Edge ran in its default configuration and in the raw-host configuration of Section~\ref{sec:eval}, 30 sessions each. Addresses were reduced to their class before they were written to disk.
+The disclosure result (Q3) depends only on the browser and the addressing of the interface, so it can be checked on real hardware without a second device. A laptop (Windows~11, Intel Wi-Fi~7 BE201 adapter) ran Microsoft Edge~155 headless through Playwright on its everyday Wi-Fi connection, which gave it a private IPv4 address behind NAT and only a link-local IPv6 address. Each session started a fresh browser, gathered candidates against a public STUN server, and connected two peer connections inside the page. Edge ran in its default and raw-host configurations, 30 sessions each. Only address classes were stored.
 
-In all 30 default sessions the offer carried one host candidate with an mDNS name and one server-reflexive candidate with a public IPv4 address different from the interface address; the private address never appeared. In all 30 raw-host sessions the host candidate was the private interface address, and the same server-reflexive candidate was present. No session produced an IPv6 candidate, because the interface had no global IPv6 address. All 60 loopback connections succeeded over a host pair (median gathering time 136--140~ms, median connection time 109--110~ms). This matches the NAT rows of Table~\ref{tab:disclosure} on a physical interface with a current browser build. It does not test isolation, gateway forwarding, or a second device, and it is one laptop on one network.
+In all 30 default sessions the offer carried one host candidate with an mDNS name and one server-reflexive candidate with a public IPv4 address different from the interface address; the private address never appeared. In all 30 raw-host sessions the host candidate was the private interface address, and the same server-reflexive candidate was present. No session produced an IPv6 candidate, because the interface had no global IPv6 address. All 60 loopback connections succeeded over a host pair (median connection time 109--110~ms). This matches the NAT rows of Table~\ref{tab:disclosure} on a physical interface with a current browser build; it does not test isolation or a second device.
+
+\subsection{Check on an iPhone}
+\label{sec:iphone}
+An iPhone~16 Pro Max (iOS~26.0) shared its 5G connection through Personal Hotspot; a laptop on the hotspot served the released test page, and Safari on the iPhone gathered candidates against the same public STUN server. The page stores only address classes.
+
+Both completed sessions gave the same result: two host candidates, each an mDNS name, and two server-reflexive candidates, one a public IPv4 address and one a global IPv6 address. No raw local address appeared. A third, two-device session was not completed and is not counted. Safari thus hid the local addresses but still gave the STUN server, and through it any peer, a public IPv4 and a global IPv6 address: the pattern of the dual-stack rows of Table~\ref{tab:disclosure}. Because only classes were stored, we cannot say whether the IPv6 address was the device's own. Two sessions on one device show its behaviour; they do not measure a rate.
 
 \subsection{Published Mobile Evidence}
 \label{sec:mobile}
-We could not test phones. The published evidence we found is summarised here and is not our measurement. For Android, the 2025 study reports that Chrome disclosed a LAN or carrier-grade NAT address and that Firefox, which protects the address on desktop, disclosed internal addresses on Android~\cite{koysha2025}; this is the behaviour the raw-host configuration stands for. For iOS, a 2021 test of Safari on iOS~15 observed two host candidates obfuscated with mDNS and one server-reflexive candidate, and found that with iCloud Private Relay switched on the server-reflexive candidate still carried the device's real public address until iOS~15.1~\cite{hancke2021}. A WebKit bug report from 2021, fixed in December 2022, describes Safari discarding the server-reflexive candidate when the host address is public and obfuscated~\cite{webkit233414}, which bears on the public-addressing configurations N6 to N8. None of these sources covers IPv6 on a campus segment, and none is a systematic measurement of current iOS.
+The following is published evidence, not our measurement. For Android, the 2025 study reports that Chrome disclosed a LAN or carrier-grade NAT address and that Firefox, which protects the address on desktop, disclosed internal addresses on Android~\cite{koysha2025}; this is the behaviour the raw-host configuration stands for. For iOS, a 2021 test of Safari on iOS~15 observed two host candidates obfuscated with mDNS and one server-reflexive candidate, and found that with iCloud Private Relay switched on the server-reflexive candidate still carried the device's real public address until iOS~15.1~\cite{hancke2021}. A WebKit bug report from 2021, fixed in December 2022, describes Safari discarding the server-reflexive candidate when the host address is public and obfuscated~\cite{webkit233414}, which bears on the public-addressing configurations N6 to N8. None of these sources covers IPv6 on a campus segment or is a systematic measurement of current iOS; the iPhone sessions above agree with the 2021 observation~\cite{hancke2021}.
 
 \subsection{What the Results Change}
 The results support three statements in the framework, sharpen one, and qualify one. They support ranking the gateway rule C1 above isolation C3: isolation by itself left a working client-to-client path for raw-host browsers. They support the statement that network controls reduce the use of a disclosed address and not the disclosure: no control changed the 80 of 80 figure for raw-host browsers under NAT. They support treating the addressing plan (C10) as the one network-side measure that changes what is disclosed. They sharpen C10: it has to cover IPv6, because a segment that translates IPv4 and hands out global IPv6 addresses disclosed a device address in every session and gave every browser a direct path that the multicast filter did not touch. They qualify C1 and C3: together these make every same-segment session depend on a relay, a web application that offers none stops working between two users on the same campus segment, and in one addressing mode some sessions failed even with a relay.
 
-The single-host check (Section~\ref{sec:realhost}) supports the disclosure part of these statements on real hardware for one browser. Not tested: any isolation-bypass attack from~\cite{framingframes2023,airsnitch2026}, countermeasures C2 and C4 to C9 and C11, client isolation on a Wi-Fi access point, and mobile browsers.
+The device checks support the disclosure part on real hardware. Not tested: any isolation-bypass attack from~\cite{framingframes2023,airsnitch2026}, countermeasures C2 and C4 to C9 and C11, client isolation on a Wi-Fi access point, and Android browsers.
 
 \section{Discussion}
 \label{sec:discussion}
@@ -487,27 +507,30 @@ The single-host check (Section~\ref{sec:realhost}) supports the disclosure part 
 
 \textit{IPv6 deserves the operator's attention first.} Address translation was the one network property that kept a default browser's address from the peer, and it applies to IPv4 only. A campus that runs dual-stack with global IPv6 on client segments is, for this leakage, in the position of the publicly addressed networks of~\cite{nibert2025}, whatever its IPv4 plan. The leakage measurements in~\cite{koysha2025} did not cover IPv6.
 
-\textit{Ethics.} The paper describes attacks that are already public and adds no technique. The emulated evaluation ran on an isolated network on one computer. The single-host check exchanged packets only with a public STUN server and within the laptop itself, as any video call does; it sent nothing to other devices and recorded no address, only address classes. No data about any person or institution was collected.
+\textit{Ethics.} The paper describes attacks that are already public and adds no technique. The emulated evaluation ran on an isolated network on one computer. The device checks exchanged packets only with a public STUN server and with a test page on the authors' own laptop, as any video call does; they ran on the authors' own devices and recorded no address, only address classes. No data about any person or institution was collected.
 
 \section{Limitations}
 \label{sec:limits}
 \begin{enumerate}
 \item \textit{No live-network measurement.} The attack steps are taken from cited sources or marked as assumptions, and none was reproduced. The evaluation covers ordinary browser behaviour under four controls, not the isolation-bypass attacks.
 \item \textit{Emulation, not Wi-Fi.} The client segment is a Linux bridge. Bridge port isolation stands in for Wi-Fi client isolation and does not reproduce any vendor's implementation, its weaknesses, or radio effects. The physical-interface check covers one laptop, one browser, and one IPv4-only network behind NAT, and tests disclosure only.
-\item \textit{Browsers.} Only headless desktop Linux builds of Chromium, Firefox, and WebKit were used. The raw-host configuration is a switch on those builds, not an Android or iOS browser, and the WebKit build is not Safari. Mobile behaviour in Section~\ref{sec:mobile} comes from published sources, two of them informal (a blog post and a bug report), and was not measured by us. Microphone permission was granted through a fake device. Sessions used one STUN and TURN implementation, one added delay, and eight repetitions per cell, so rates between about 60\% and 100\% cannot be told apart within a cell. The failure of raw-host sessions under translation is reported and not explained.
+\item \textit{Browsers.} Only headless desktop Linux builds of Chromium, Firefox, and WebKit were used. The raw-host configuration is a switch on those builds, not an Android or iOS browser, and the WebKit build is not Safari. Mobile evidence is two sessions on one iPhone (iOS~26.0), on a cellular connection rather than campus Wi-Fi, and published sources in Section~\ref{sec:mobile}, two of them informal (a blog post and a bug report). Android was not measured by us. Microphone permission was granted through a fake device. Sessions used one STUN and TURN implementation, one added delay, and eight repetitions per cell, so rates between about 60\% and 100\% cannot be told apart within a cell. The failure of raw-host sessions under translation is reported and not explained.
 \item \textit{Reference model, not a real network.} The architecture combines RFC~7593 with one published description of a university deployment. Assumptions A1 to A4 may be false at a given institution, and the trees change if they are.
 \item \textit{Judgement-based ratings.} Burden and enforcement are ordinal ratings assigned by the authors. No cost data, vendor survey, or expert elicitation supports them. A different ordering rule, for example coverage first, would move C9 to the top.
 \item \textit{Coverage counts steps, not risk.} Steps are not weighted by likelihood or impact, so a coverage of six is not twice as good as three.
-\item \textit{Evidence quality.} The main leakage measurement is an unreviewed preprint that tested neither VPNs nor Apple platforms; the covert-channel evidence is one vendor report; one related-work entry~\cite{bocan2026} is an undated preprint we could not re-check.
+\item \textit{Evidence quality.} The main leakage measurement is an unreviewed preprint that tested neither VPNs nor Apple platforms; the covert-channel evidence is one vendor report.
 \item \textit{Search.} The literature search used one index and was screened by the two authors without a formal protocol. Relevant work may have been missed.
 \item \textit{Scope.} Attacks on authentication, rogue access points, and wired residence networks are not modelled.
 \end{enumerate}
 
 \section{Conclusion and Future Work}
 \label{sec:conclusion}
-This paper joined three bodies of published work, WebRTC address leakage, Wi-Fi client-isolation bypass, and the eduroam architecture, into a threat model for a university BYOD wireless network. It defined five leakage classes and four adversaries, decomposed three campus scenarios into twenty attack steps, and ranked eleven countermeasures for an operator who cannot touch the endpoints. Under a rule that puts deployment burden first, gateway filtering and VLAN separation rank highest, per-user isolation is the strongest measure and the most expensive, and client isolation is a baseline that must not be relied on alone. An emulation with 560 browser sessions, and a 60-session check on a physical Wi-Fi interface for the disclosure result, agreed with the ranking on the points it could test and added two findings. Isolation alone left a path through the gateway for browsers that advertise raw addresses, and the gateway rule closed it. Address translation, not mDNS obfuscation or multicast filtering, decided whether a default browser's address reached the peer, and global IPv6 on the client segment undid that protection in every session.
+This paper joined work on WebRTC address leakage, Wi-Fi client-isolation bypass, and eduroam into a threat model for a university BYOD wireless network, with twenty attack steps in three campus scenarios and eleven ranked countermeasures. Under a rule that puts deployment burden first, gateway filtering and VLAN separation rank highest, per-user isolation is the strongest measure and the most expensive, and client isolation is a baseline that must not be relied on alone. An emulation with 560 browser sessions, a 60-session check on a physical Wi-Fi interface, and two sessions on an iPhone, agreed with the ranking on the points it could test and added two findings. Isolation alone left a path through the gateway for browsers that advertise raw addresses, and the gateway rule closed it. Address translation, not mDNS obfuscation or multicast filtering, decided whether a default browser's address reached the peer, and global IPv6 on the client segment undid that protection in every session. The iPhone showed the same pattern on a cellular connection.
 
-The next steps are to repeat the evaluation on Wi-Fi access points and with Android and iOS browsers; to reproduce the leakage measurements on a campus network with the operator's approval, including VPN cases; to check assumptions A1 to A4 against real deployments; to find the mechanism of the relay failures under translation; and to replace the ordinal ratings with estimates from campus network administrators.
+The next steps are to repeat the evaluation on Wi-Fi access points, with Android browsers, and with more iOS devices and versions; to reproduce the leakage measurements on a campus network with the operator's approval, including VPN cases; to check assumptions A1 to A4 against real deployments; to find the mechanism of the relay failures under translation; and to replace the ordinal ratings with estimates from campus network administrators.
+
+\section*{Acknowledgment}
+The test scripts, data, and paper source are released at \url{https://github.com/shubhisingh1510/cnpaperwork}. In line with IEEE policy on AI-generated content, the authors disclose that Claude (Anthropic), an AI assistant, was used to help draft and edit the text, write the testbed and test-page scripts, and format the manuscript. All experiments were run by the authors, and the authors reviewed the content and take full responsibility for it.
 
 \balance
 \bibliographystyle{IEEEtran}

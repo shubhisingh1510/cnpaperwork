@@ -1,15 +1,16 @@
 # cnpaperwork
 
-Paper, data and test kit for **"Threat-Modelling WebRTC-Based IP and Metadata Leakage on University BYOD Networks: A Campus-Specific Countermeasure Framework with an Emulated Evaluation"** by Shubhi Singh and Jilagam Yatin (VIT Vellore).
+Paper, data and test kit for **"Threat-Modelling WebRTC-Based IP and Metadata Leakage on University BYOD Networks: A Campus-Specific Countermeasure Framework with an Emulated Evaluation"** by Shubhi Singh, Jilagam Yatin and Dr. Kopperundevi (SCOPE, VIT Vellore).
 
 | Folder / file | What it is |
 |---|---|
-| `cnfinalpaper.pdf` | The paper (IEEE conference format, 10 pages) |
+| `paper_source/WebRTC_Campus_Threat_Model.pdf` | **The paper** (IEEE conference format, 10 pages) |
 | `paper_source/` | LaTeX source: `.tex`, `references.bib`, generated table bodies |
 | `experiment/` | Emulated testbed (`run_matrix.py`, `agent.py`, `analyze.py`) and its raw and processed results (560 + 140 sessions) |
 | `hardware_test/server.py` | Test page for real phones and laptops (Python standard library only) |
 | `hardware_test/real_host_probe.py` | Single-laptop disclosure probe used in the paper (needs Playwright) |
 | `hardware_test/real_host_results.jsonl` | Its 60 results (address classes only) |
+| `hardware_test/iphone_screenshots/` | Screenshots of the two iPhone 16 Pro Max (iOS 26.0) Safari sessions used in the paper, and one unfinished pair test that is not counted |
 | `hardware_test/Phone_Test_Steps.pdf` | Phone test steps for a **Windows** laptop |
 | `hardware_test/Hardware_Setup_Steps.pdf` | Full router + cable test (client isolation), any OS |
 

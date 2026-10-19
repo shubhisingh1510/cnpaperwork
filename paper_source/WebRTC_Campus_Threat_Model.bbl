@@ -114,10 +114,6 @@ S.~Tang, E.~Alowaisheq, X.~Mi, Y.~Chen, X.~Wang, and Y.~Dou, ``Stealthy peers:
   Understanding security risks of {WebRTC}-based peer-assisted video
   streaming,'' arXiv:2212.02740, Dec. 2022.
 
-\bibitem{bocan2026}
-V.~Bocan, ``Look, listen, leak: Out-of-band {WebRTC} pairing as an enterprise
-  egress surface,'' SSRN preprint, 2026, doi: 10.2139/ssrn.6997364.
-
 \bibitem{schneier1999}
 B.~Schneier, ``Attack trees,'' \emph{Dr. Dobb's J.}, vol.~24, no.~12, pp.
   21--29, Dec. 1999.
@@ -133,13 +129,13 @@ T.~Dietz, B.~Claise, P.~Aitken, F.~Dressler, and G.~Carle, ``Information model
 
 \bibitem{hancke2021}
 P.~Hancke, ``Apple's not-so-private relay fails with {WebRTC},'' webrtcHacks,
-  \url{https://webrtchacks.com/apples-not-so-private-relay-fails-with-webrtc/},
-  Sep. 2021.
+  Sep. 2021, [Online]. Available:
+  \url{https://webrtchacks.com/apples-not-so-private-relay-fails-with-webrtc/}.
 
 \bibitem{webkit233414}
 K.~Lee, ``A server-reflexive candidate is discarded when the host {IPv4}
-  address is public and obfuscated,'' WebKit Bugzilla, bug 233414,
-  \url{https://bugs.webkit.org/show_bug.cgi?id=233414}, resolved Dec. 2022,
-  Nov. 2021.
+  address is public and obfuscated,'' WebKit Bugzilla, bug 233414, resolved
+  Dec. 2022, Nov. 2021, [Online]. Available:
+  \url{https://bugs.webkit.org/show_bug.cgi?id=233414}.
 
 \end{thebibliography}
